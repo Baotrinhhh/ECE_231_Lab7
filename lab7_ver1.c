@@ -68,7 +68,7 @@ int main(void)
         frac_temp = (int)(((temp - int_temp) * 10) + 0.5f); // Round to nearest tenth
 
         // Check if the temperature exceeds threshold and update the LED status.
-        if (temp >= 90.0f)
+        if (temp >= 80.0f)
         {
             PORTD |= (1 << REDLED);
             too_hot = " TOO_HOT";
