@@ -22,6 +22,7 @@
 #define REDLED PD4     // LED output on PD4 (Arduino Uno pin 4)
 #define MYDELAY 100    // Debounce delay in msec
 #define BUFFER_SIZE 16  // Buffer size for temperature string
+#define TOO_HOT 80.0f
 
 int main(void)
 {
@@ -29,10 +30,11 @@ int main(void)
     uint16_t dout;
     float temp;
     int int_temp, frac_temp;
-    unsigned char button, deg, *too_hot;
+    unsigned char button, deg;
+    const char *too_hot;
 
     // Configure LED pin as output and enable pull-up on the button pin.
-    DDRD = (1 << REDLED);
+    DDRD |= (1 << REDLED);
     PORTD |= (1 << BUTTON);
 
     OLED_Init();
@@ -68,7 +70,7 @@ int main(void)
         frac_temp = (int)(((temp - int_temp) * 10) + 0.5f); // Round to nearest tenth
 
         // Check if the temperature exceeds threshold and update the LED status.
-        if (temp >= 80.0f)
+        if (temp >= TOO_HOT)
         {
             PORTD |= (1 << REDLED);
             too_hot = " TOO_HOT";
@@ -80,7 +82,7 @@ int main(void)
         }
 
         // Format the temperature string and send via UART.
-        snprintf(buf, sizeof(buf), "%d.%01d %c", int_temp, frac_temp, deg);
+        snprintf(buf, sizeof(buf), "%d.%01d%c", int_temp, frac_temp, deg);
         send_string(buf);
         send_string(too_hot);
         uart_send(13); // TX carriage return
