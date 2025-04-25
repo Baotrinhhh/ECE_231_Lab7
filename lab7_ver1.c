@@ -4,7 +4,7 @@
     This program reads an analog value from an ADC, converts it into a temperature value,
     and displays the result via UART and on an OLED. A momentary pushbutton connected 
     to PD3 selects between Fahrenheit and Celsius conversion modes. Additionally, an LED 
-    on PD4 is lit when the temperature exceeds 90 units.
+    on PD4 is lit when the temperature exceeds 80F units.
 
   Author: Bao Trinh
   Date: 04/19/25
