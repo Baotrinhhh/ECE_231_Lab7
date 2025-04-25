@@ -22,7 +22,8 @@
 #define REDLED PD4     // LED output on PD4 (Arduino Uno pin 4)
 #define MYDELAY 100    // Debounce delay in msec
 #define BUFFER_SIZE 16  // Buffer size for temperature string
-#define TOO_HOT 80.0f
+#define TOO_HOTF 80.0f  // Temperature threshold for LED activation in Fahrenheit
+#define TOO_HOTC 26.68f // Temperature threshold for LED activation in Celsius
 
 int main(void)
 {
@@ -70,7 +71,12 @@ int main(void)
         frac_temp = (int)(((temp - int_temp) * 10) + 0.5f); // Round to nearest tenth
 
         // Check if the temperature exceeds threshold and update the LED status.
-        if (temp >= TOO_HOT)
+        if (deg == 'F' && temp > TOO_HOTF)
+        {
+            PORTD |= (1 << REDLED);
+            too_hot = " TOO_HOT";
+        }
+        else if (deg == 'C' && temp > TOO_HOTC)
         {
             PORTD |= (1 << REDLED);
             too_hot = " TOO_HOT";
